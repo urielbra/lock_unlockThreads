@@ -7,26 +7,28 @@
 #define NUM_THREADS 5
 
 int x = 0 ;
-volatile int lock = 0;
+int lock = 0;
+
 void *threadBody (void *id)
 {
    long tid = (long) id ;
 	int i;
+
 	for (i=0;i<10000;i++){
-		while(__sync_lock_test_and_set(&lock, 1));
+		// printf("Oi Robson");
 	   x++ ;
-	   __sync_lock_release(&lock);
-   
-	}
-		pthread_exit (NULL) ;
+
+	 }
+   pthread_exit (NULL) ;
 }
 
 int main (int argc, char *argv[])
 {
-
-
    pthread_t thread [NUM_THREADS] ;
    long i, status ;
+   	// struct rusage ru;
+    // getrusage(RUSAGE_SELF, &ru);
+    // printf("\nInvoluntarias: %5ld \nVoluntarias: %5ld",ru.ru_nivcsw,ru.ru_nvcsw);
    
    for (i=0; i<NUM_THREADS; i++) {
       status = pthread_create (&thread[i], NULL, threadBody, (void *) i) ;
